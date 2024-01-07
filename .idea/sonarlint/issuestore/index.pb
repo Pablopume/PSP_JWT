@@ -37,3 +37,13 @@ S
 #src/main/java/security/JWTAuth.java,6\1\61811d8d66f0d76e8f1a0f383cdd80ceeb46706a
 a
 1src/main/java/security/InMemoryIdentityStore.java,3\6\367971cbfc3fd02e648ee408c6e9a37499a83ccb
+Y
+)src/main/java/dao/impl/DaoLibrosImpl.java,4\7\4713ba72761b957ced35ffb61050367b53c41783
+P
+ src/main/java/dao/DaoLibros.java,e\c\ec969e0fdcec3b2593b39a0de2ea79342f4f752d
+[
++src/main/java/servicios/ServiciosLibro.java,4\f\4f092d34d02e426d8d25fbcd4ab6e80f5d8b4e98
+e
+5src/main/java/servicios/impl/ServiciosLibrosImpl.java,3\0\30041f3e3592353893a5e63689722a148769ed09
+Z
+*src/main/java/jakarta/rest/LibrosRest.java,a\e\ae695c494bb813c060304071dffaeea5a662e82b
