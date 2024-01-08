@@ -5,8 +5,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import modelo.Autor;
-import servicios.ServicesAutor;
+import modelo.Credentials;
+import servicios.ServiciosCredentials;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,24 +15,26 @@ import java.time.LocalDateTime;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ActivarRest {
-    private final ServicesAutor autorService;
 
+    private final ServiciosCredentials serviciosCredentials;
     @Inject
-    public ActivarRest(ServicesAutor autorService) {
-        this.autorService = autorService;
+    public ActivarRest( ServiciosCredentials serviciosCredentials) {
+
+        this.serviciosCredentials = serviciosCredentials;
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
+   // @RolesAllowed({"ADMIN", "USER"})
     public Response activarCuenta(@QueryParam("codigo") String codigoActivacion) {
-        Autor autor = autorService.getByCodigoActivacion(codigoActivacion);
-        if (autor != null) {
-            if (Duration.between(autor.getFechaActivacion(), LocalDateTime.now()).getSeconds()>=300) {
+
+        Credentials credentials= serviciosCredentials.getByCodigoActivacion(codigoActivacion);
+        if (credentials != null) {
+            if (Duration.between(credentials.getFechaActivacion(), LocalDateTime.now()).getSeconds()>=300) {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Ha pasado el tiempo ").build();
             }
             else {
-                autor.setActivado(true);
-                autorService.update(autor);
+                credentials.setActivado(true);
+                serviciosCredentials.update(credentials);
                 return Response.ok("Cuenta activada exitosamente").build();
             }
         } else {

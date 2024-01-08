@@ -10,7 +10,7 @@ import servicios.ServiciosLibro;
 
 import java.util.List;
 
-@Path("/autores")
+@Path("/libros")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class LibrosRest {

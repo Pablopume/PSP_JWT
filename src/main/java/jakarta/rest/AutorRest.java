@@ -23,7 +23,6 @@ public class AutorRest {
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
     public Autor addAutor(Autor autor) {
         return servicesAutorImpl.add(autor);
     }
