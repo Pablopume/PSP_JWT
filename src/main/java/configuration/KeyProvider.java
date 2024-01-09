@@ -6,11 +6,17 @@ import jakarta.inject.Singleton;
 import jakarta.ws.rs.Produces;
 
 import java.security.Key;
-
+@Singleton
 public class KeyProvider {
-    @Singleton
+    private final Key privateKey;
+    public KeyProvider() {
+        // Generar la clave una vez en la inicialización
+        this.privateKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    }
+
     @Produces
     public Key generatePrivateKey() {
-       return Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        // Devolver la misma clave almacenada
+        return privateKey;
     }
 }

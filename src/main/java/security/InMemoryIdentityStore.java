@@ -25,24 +25,33 @@ public class InMemoryIdentityStore implements IdentityStore {
     public int priority() {
         return 10;
     }
-
     @Override
     public CredentialValidationResult validate(Credential credential) {
         TokenCredentials tokens = (TokenCredentials) credential;
         Credentials credentials = new Credentials();
+
         if (tokens.getAccessToken() != null) {
             credentials.setAccessToken(tokens.getAccessToken());
+
             try {
-                if (credentialsService.validate(tokens.getAccessToken() ) != null) {
-                    return new CredentialValidationResult
-                            (credentials.getEmail(), Collections.singleton(credentials.getRol()));
-                } else return INVALID_RESULT;
-            } catch (Exception e){
+                // Validate the token once and store the result
+                Credentials validatedCredentials = credentialsService.validate(tokens.getAccessToken());
+
+                if (validatedCredentials != null) {
+                    return new CredentialValidationResult(
+                            validatedCredentials.getEmail(),
+                            Collections.singleton(validatedCredentials.getRol())
+                    );
+                } else {
+                    return INVALID_RESULT;
+                }
+            } catch (Exception e) {
                 return CredentialValidationResult.NOT_VALIDATED_RESULT;
             }
-
         }
+
         return INVALID_RESULT;
     }
+
 
 }

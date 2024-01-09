@@ -7,6 +7,7 @@ import dao.MandarMail;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import jakarta.inject.Inject;
@@ -20,6 +21,7 @@ import java.util.UUID;
 
 public class ServiciosCredentialsImpl implements ServiciosCredentials {
     private final KeyProvider keyProvider;
+
     private final DaoCredentials daoCredentials;
     private final HasheoContrasenyas hasheoContrasenyas;
 
@@ -74,7 +76,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
     }
 
     public Credentials validate(String accessToken) {
-        Credentials credentials = new Credentials();
+        Credentials credentials;
         credentials=daoCredentials.getByAccessToken(accessToken);
         credentials.setAccessToken(credentials.getAccessToken());
         if (validateToken(credentials.getAccessToken())) {
@@ -84,18 +86,20 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
     }
 
     private boolean validateToken(String accessToken) {
-        Jws<Claims> claimsJws=Jwts.parserBuilder()
-                .setSigningKey(keyProvider.generatePrivateKey())
-                .build()
-                .parseClaimsJws(accessToken);
-        long expirationMillis=claimsJws.getBody().getExpiration().getTime();
-        if (System.currentTimeMillis()<=expirationMillis) {
-            return true;
-        }
-        else {
+        try {
+            Jws<Claims> claimsJws = Jwts.parserBuilder()
+                    .setSigningKey(keyProvider.generatePrivateKey())
+                    .build()
+                    .parseClaimsJws(accessToken);
+
+            long expirationMillis = claimsJws.getBody().getExpiration().getTime();
+            return System.currentTimeMillis() < expirationMillis;
+
+        } catch (ExpiredJwtException e) {
             throw new Exception401("Token expirado");
         }
     }
+
 
     public boolean verifyPassword(String providedPassword, String storedHash) {
         Argon2 argon2 = Argon2Factory.create();
@@ -131,7 +135,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
                 .setSubject(credentials.getEmail())
                 .claim("rol", credentials.getRol())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 300))
+                .setExpiration(new Date(System.currentTimeMillis() + 300000))  // 300 seconds
                 .signWith(keyProvider.generatePrivateKey())
                 .compact();
 
@@ -142,7 +146,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
                 .setSubject(credentials.getEmail())
                 .claim("rol", credentials.getRol())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 60000))
+                .setExpiration(new Date(System.currentTimeMillis() + 600000))
                 .signWith(keyProvider.generatePrivateKey())
                 .compact();
     }
