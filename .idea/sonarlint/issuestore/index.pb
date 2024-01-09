@@ -63,3 +63,9 @@ W
 .src/main/java/dao/impl/DaoCredentialsImpl.java,4\c\4c69862fa9b692f3377ca2ca5dc04416c80217f9
 j
 :src/main/java/servicios/impl/ServiciosCredentialsImpl.java,8\0\80ab2d3bded852a6b2a9ae22d54edbc89ea93d4a
+\
+,src/main/java/configuration/KeyProvider.java,b\4\b432acc1bee05d370210a1e74c9f7a6a0803033b
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0

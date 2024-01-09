@@ -1,29 +1,31 @@
 package servicios.impl;
 
+import configuration.KeyProvider;
 import dao.DaoCredentials;
 import dao.HasheoContrasenyas;
 import dao.MandarMail;
 import de.mkammerer.argon2.Argon2;
 import de.mkammerer.argon2.Argon2Factory;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import jakarta.inject.Inject;
 import jakarta.mail.MessagingException;
 import modelo.Credentials;
+import modelo.exceptions.Exception401;
 import servicios.ServiciosCredentials;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.UUID;
 
 public class ServiciosCredentialsImpl implements ServiciosCredentials {
-    private final SecretKey secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private final KeyProvider keyProvider;
     private final DaoCredentials daoCredentials;
     private final HasheoContrasenyas hasheoContrasenyas;
 
     @Inject
-    public ServiciosCredentialsImpl(DaoCredentials daoCredentials, HasheoContrasenyas hasheoContrasenyas) {
+    public ServiciosCredentialsImpl(KeyProvider keyProvider, DaoCredentials daoCredentials, HasheoContrasenyas hasheoContrasenyas) {
+        this.keyProvider = keyProvider;
         this.daoCredentials = daoCredentials;
         this.hasheoContrasenyas = hasheoContrasenyas;
     }
@@ -59,16 +61,40 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
 
     }
 // http://localhost:8080/PSP_JWT-1.0-SNAPSHOT/api/credentials/login?user=pabsermat@gmail.com&password=1234565675785858566548648645858548548458
-    public boolean doLogin(String email, String password) {
+    public Credentials doLogin(String email, String password) {
         Credentials credentials = daoCredentials.getByEmail(email);
         if (verifyPassword(password, credentials.getPassword())) {
             credentials.setAccessToken(generateToken(email));
             credentials.setRefreshToken(generateRefreshToken(email));
             daoCredentials.updateAccessToken(credentials);
             daoCredentials.updateRefreshToken(credentials);
+            return credentials;
+        }
+        return null;
+    }
+
+    public Credentials validate(String accessToken) {
+        Credentials credentials = new Credentials();
+        credentials=daoCredentials.getByAccessToken(accessToken);
+        credentials.setAccessToken(credentials.getAccessToken());
+        if (validateToken(credentials.getAccessToken())) {
+            return credentials;
+        }
+        else throw new Exception401("Token no válido");
+    }
+
+    private boolean validateToken(String accessToken) {
+        Jws<Claims> claimsJws=Jwts.parserBuilder()
+                .setSigningKey(keyProvider.generatePrivateKey())
+                .build()
+                .parseClaimsJws(accessToken);
+        long expirationMillis=claimsJws.getBody().getExpiration().getTime();
+        if (System.currentTimeMillis()<=expirationMillis) {
             return true;
         }
-        return false;
+        else {
+            throw new Exception401("Token expirado");
+        }
     }
 
     public boolean verifyPassword(String providedPassword, String storedHash) {
@@ -106,7 +132,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
                 .claim("rol", credentials.getRol())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 300))
-                .signWith(SignatureAlgorithm.HS512, secretKey)
+                .signWith(keyProvider.generatePrivateKey())
                 .compact();
 
     }
@@ -117,7 +143,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
                 .claim("rol", credentials.getRol())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 60000))
-                .signWith(secretKey)
+                .signWith(keyProvider.generatePrivateKey())
                 .compact();
     }
 

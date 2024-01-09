@@ -161,5 +161,29 @@ public void forgotPassword(Credentials credentials) {
         }
     }
 
+    public Credentials getByAccessToken(String accessToken) {
+        Credentials credentials = null;
+        try (Connection connection = dbConnectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Credentials WHERE accessToken = ?")) {
+            preparedStatement.setString(1, accessToken.strip());
+            ResultSet rs = preparedStatement.executeQuery();
+
+            if (rs.next()) {
+
+                credentials = new Credentials(rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getInt("activado") == 1,
+                        rs.getTimestamp("fechaActivacion").toLocalDateTime(),
+                        rs.getString("codigoActivacion"),
+                        rs.getString("rol"),
+                        rs.getString("accessToken"),
+                        rs.getString("refreshToken"),
+                        rs.getString("temporalPassword"));
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        return credentials;
+    }
 
 }

@@ -32,9 +32,9 @@ public class CredentialsRest {
     @Path("/login")
     public Response getLogin(@QueryParam("user") String user, @QueryParam("password") String password) {
         Response response;
-        boolean isAuthenticated = serviciosCredentials.doLogin(user, password);
-        if (isAuthenticated) {
-            response = Response.status(Response.Status.NO_CONTENT).build();
+        Credentials result = serviciosCredentials.doLogin(user, password);
+        if (result!= null) {
+            response = Response.status(Response.Status.NO_CONTENT).header("Authorization", "Bearer "+ result.getAccessToken()).header("Refresh token",result.getRefreshToken()).build();
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
         }

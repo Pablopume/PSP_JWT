@@ -11,4 +11,5 @@ public interface DaoCredentials {
     void updateRefreshToken(Credentials credentials);
     void updateAccessToken(Credentials credentials);
     Credentials getByRefreshToken(String refreshToken);
+    Credentials getByAccessToken(String accessToken);
 }

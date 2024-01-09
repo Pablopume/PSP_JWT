@@ -8,6 +8,7 @@ public interface ServiciosCredentials {
     void update(Credentials credentials);
     Credentials getByCodigoActivacion(String id);
     Credentials forgotPassword(String email);
-    boolean doLogin(String email, String password);
+    Credentials doLogin(String email, String password);
     String refreshToken(String refreshToken);
+   Credentials validate(String accesToken);
 }

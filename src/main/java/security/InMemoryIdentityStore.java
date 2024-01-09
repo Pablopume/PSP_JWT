@@ -33,7 +33,7 @@ public class InMemoryIdentityStore implements IdentityStore {
         if (tokens.getAccessToken() != null) {
             credentials.setAccessToken(tokens.getAccessToken());
             try {
-                if (credentialsService.doLogin(credentials.getEmail(), credentials.getPassword())) {
+                if (credentialsService.validate(tokens.getAccessToken() ) != null) {
                     return new CredentialValidationResult
                             (credentials.getEmail(), Collections.singleton(credentials.getRol()));
                 } else return INVALID_RESULT;
