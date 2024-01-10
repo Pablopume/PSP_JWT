@@ -85,6 +85,12 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
         else throw new Exception401("Token no válido");
     }
 
+    @Override
+    public void cambiarContrasenya(Credentials credentials) {
+        credentials.setPassword(hasheoContrasenyas.hashPassword(credentials.getPassword()));
+        daoCredentials.cambiarContrasenya(credentials);
+    }
+
     private boolean validateToken(String accessToken) {
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()

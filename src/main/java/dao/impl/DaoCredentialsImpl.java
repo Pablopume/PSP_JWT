@@ -186,4 +186,14 @@ public void forgotPassword(Credentials credentials) {
         return credentials;
     }
 
+    public void cambiarContrasenya(Credentials credentials) {
+        try (Connection connection = dbConnectionPool.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement("UPDATE Credentials SET password = ? WHERE email = ?")) {
+            preparedStatement.setString(1, credentials.getPassword());
+            preparedStatement.setString(2, credentials.getEmail());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+    }
 }

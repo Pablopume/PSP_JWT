@@ -47,11 +47,19 @@ public class CredentialsRest {
         Response response;
         String newToken = serviciosCredentials.refreshToken(refreshToken);
         if (newToken != null) {
-            response = Response.ok(newToken).build();
+            response=Response.status(Response.Status.NO_CONTENT).header("Authorization", "Bearer "+ newToken).header("RefreshToken",refreshToken).build();
+
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
         }
         return response;
+    }
+
+    @PUT
+    @Path("/cambiarContrasenya")
+    public Response cambiarContrasenya(Credentials credentials) {
+        serviciosCredentials.cambiarContrasenya(credentials);
+        return Response.ok("Contraseña cambiada correctamente").build();
     }
 
 }
