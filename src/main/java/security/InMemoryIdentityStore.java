@@ -28,11 +28,7 @@ public class InMemoryIdentityStore implements IdentityStore {
     @Override
     public CredentialValidationResult validate(Credential credential) {
         TokenCredentials tokens = (TokenCredentials) credential;
-        Credentials credentials = new Credentials();
-
         if (tokens.getAccessToken() != null) {
-            credentials.setAccessToken(tokens.getAccessToken());
-
             try {
                 // Validate the token once and store the result
                 Credentials validatedCredentials = credentialsService.validate(tokens.getAccessToken());
