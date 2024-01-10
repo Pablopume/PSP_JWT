@@ -122,13 +122,13 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
     public Credentials forgotPassword(String email) {
         Credentials credentials=new Credentials();
         credentials.setEmail(email);
-        UUID uuid = UUID.randomUUID();
-        credentials.setTemporalPassword(hasheoContrasenyas.hashPassword(uuid.toString()));
+        String contrasenya=Utils.randomBytes();
+        credentials.setTemporalPassword(hasheoContrasenyas.hashPassword(contrasenya));
         daoCredentials.forgotPassword(credentials);
         MandarMail mandarMail = new MandarMail();
         try {
             String cuerpoCorreo = "Recuperación de contraseña<br><br>";
-            cuerpoCorreo += "Esta es tu nueva contraseña: " + uuid + ", la contraseña tendrá solo un uso, la próxima vez que inicies sesión tendrás que cambiarla<br>";
+            cuerpoCorreo += "Esta es tu nueva contraseña: " + contrasenya + ", la contraseña tendrá solo un uso, la próxima vez que inicies sesión tendrás que cambiarla<br>";
             mandarMail.generateAndSendEmail(credentials.getEmail(), cuerpoCorreo, "Correo de bienvenida");
         } catch (MessagingException e) {
 
