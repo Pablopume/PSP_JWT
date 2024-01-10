@@ -1,4 +1,4 @@
-package configuration;
+package jakarta.di;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

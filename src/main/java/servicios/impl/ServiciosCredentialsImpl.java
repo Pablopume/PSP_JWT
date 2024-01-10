@@ -1,6 +1,7 @@
 package servicios.impl;
 
-import configuration.KeyProvider;
+import dao.Utils;
+import jakarta.di.KeyProvider;
 import dao.DaoCredentials;
 import dao.HasheoContrasenyas;
 import dao.MandarMail;
@@ -34,16 +35,17 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
 
     @Override
     public Credentials addCredentials(Credentials credentials) {
-        UUID uuid = UUID.randomUUID();
-        credentials.setCodigoActivacion(uuid.toString());
+
+        String codigo= Utils.randomBytes();
+        credentials.setCodigoActivacion(codigo);
         credentials.setPassword(hasheoContrasenyas.hashPassword(credentials.getPassword()));
         daoCredentials.addCredentials(credentials);
         MandarMail mandarMail = new MandarMail();
         try {
-            String codigoActivacion = credentials.getCodigoActivacion();
+
             String cuerpoCorreo = "¡Bienvenido nuevo usuario!<br><br>";
             cuerpoCorreo += "Para activar tu cuenta, haz clic en el siguiente enlace:<br>";
-            cuerpoCorreo += "<a href='http://localhost:8080/PSP_JWT-1.0-SNAPSHOT/api/activar-cuenta?codigo=" + codigoActivacion + "'>Pincha aquí</a>";
+            cuerpoCorreo += "<a href='http://localhost:8080/PSP_JWT-1.0-SNAPSHOT/api/activar-cuenta?codigo=" + codigo + "'>Pincha aquí</a>";
             mandarMail.generateAndSendEmail(credentials.getEmail(), cuerpoCorreo, "Correo de bienvenida");
         } catch (MessagingException e) {
 

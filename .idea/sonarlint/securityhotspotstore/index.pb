@@ -76,3 +76,7 @@ Q
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 Q
 !src/main/java/dao/MandarMail.java,4\6\46c48adc72fde138e682ef7f502263b85cffcdbc
+Y
+)src/main/java/jakarta/di/KeyProvider.java,c\d\cdf7ceb6dbc5f5df4c49aef6105de5aa28454e70
+L
+src/main/java/dao/Utils.java,2\c\2c2de30de3fbd3decbdaa62d693d380ae93846d8

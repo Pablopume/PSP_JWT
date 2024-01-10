@@ -19,26 +19,7 @@ import java.util.Properties;
 public class MandarMail {
 
 
-//    public void mandarMail(String to, String msg, String subject) {
-//        try {
-//            Email email = new SimpleEmail();
-//
-//            email.setHostName("smtp.gmail.com");
-//            email.setSmtpPort(Integer.parseInt("587"));
-//            email.setAuthentication("alumnosdamquevedo@gmail.com", "quevedo2020");
-//            //email.setSSLOnConnect(true);
-//            email.setStartTLSEnabled(true);
-//            email.setFrom("alumnosDamQuevedo@gmail.com");
-//            email.setSubject(subject);
-//            email.setContent(msg,"text/html");
-//            email.addTo(to);
-//
-//            email.send();
-//        } catch (EmailException ex) {
-//
-//            Logger.getLogger(dao.MandarMail.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+
 
 
     public void generateAndSendEmail(String to, String msg, String subject) throws MessagingException {
@@ -52,7 +33,6 @@ public class MandarMail {
         mailServerProperties.put("mail.smtp.port", Integer.parseInt("587"));
         mailServerProperties.put("mail.smtp.auth", "true");
         mailServerProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
-//        mailServerProperties.put("mail.smtp.ssl.trust", "smtp01.educa.madrid.org");
         mailServerProperties.put("mail.smtp.starttls.enable", "true");
 
         // Step2
@@ -61,8 +41,7 @@ public class MandarMail {
         generateMailMessage = new MimeMessage(getMailSession);
         generateMailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
         generateMailMessage.setSubject(subject);
-        String emailBody = msg;
-        generateMailMessage.setContent(emailBody, "text/html");
+        generateMailMessage.setContent(msg, "text/html");
 
 
         // Step3
