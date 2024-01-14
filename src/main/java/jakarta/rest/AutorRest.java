@@ -10,7 +10,7 @@ import modelo.Autor;
 import servicios.ServicesAutor;
 
 
-@Path("/autores")
+@Path("/customer")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AutorRest {
