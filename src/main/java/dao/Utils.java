@@ -2,17 +2,16 @@ package dao;
 
 import java.security.SecureRandom;
 import java.util.Base64;
-import java.util.Random;
+
 
 /**
- *
  * @author oscar
  */
 public class Utils {
+    private Utils() {
+    }
 
-
-    public static String randomBytes()
-    {
+    public static String randomBytes() {
         SecureRandom sr = new SecureRandom();
         byte[] bits = new byte[32];
         sr.nextBytes(bits);

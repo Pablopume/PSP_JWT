@@ -1,14 +1,14 @@
 package servicios;
 
-import modelo.Libro;
+import modelo.Order;
 
 import java.util.List;
 
 public interface ServiciosLibro {
 
-    void addLibro(Libro libro);
-    void updateLibro(Libro libro);
+    void addLibro(Order order);
+    void updateLibro(Order order);
     void deleteLibro(int id);
-    List<Libro> getLibrosAutor(int autorId);
-    List<Libro> getAlll();
+    List<Order> getLibrosAutor(int autorId);
+    List<Order> getAlll();
 }

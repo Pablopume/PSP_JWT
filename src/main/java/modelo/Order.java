@@ -4,13 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Libro {
+public class Order {
 private int id;
-private String titulo;
-private int anyo;
-private int autorId;
+private int customerId;
+private LocalDate orderDate;
+private int tableId;
 
 }

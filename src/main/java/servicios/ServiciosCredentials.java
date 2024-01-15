@@ -18,4 +18,6 @@ public interface ServiciosCredentials {
 
     Credentials validate(String accesToken);
     void cambiarContrasenya(Credentials credentials);
+
+    void cambiarCodigoActivacion(Credentials credentials);
 }

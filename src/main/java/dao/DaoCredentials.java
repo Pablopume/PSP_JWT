@@ -13,5 +13,5 @@ public interface DaoCredentials {
     Credentials getByRefreshToken(String refreshToken);
     Credentials getByAccessToken(String accessToken);
     void cambiarContrasenya(Credentials credentials);
-
+    void cambiarCodigoActivacion(Credentials credentials);
 }

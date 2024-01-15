@@ -2,7 +2,7 @@ package servicios.impl;
 
 import dao.DaoLibros;
 import jakarta.inject.Inject;
-import modelo.Libro;
+import modelo.Order;
 import servicios.ServiciosLibro;
 
 import java.util.List;
@@ -15,13 +15,13 @@ private final DaoLibros daoLibros;
     }
 
     @Override
-    public void addLibro(Libro libro) {
-        daoLibros.addLibro(libro);
+    public void addLibro(Order order) {
+        daoLibros.addLibro(order);
     }
 
     @Override
-    public void updateLibro(Libro libro) {
-        daoLibros.updateLibro(libro);
+    public void updateLibro(Order order) {
+        daoLibros.updateLibro(order);
     }
 
     @Override
@@ -30,12 +30,12 @@ private final DaoLibros daoLibros;
     }
 
     @Override
-    public List<Libro> getLibrosAutor(int autorId) {
+    public List<Order> getLibrosAutor(int autorId) {
         return daoLibros.getLibrosAutor(autorId);
     }
 
     @Override
-    public List<Libro> getAlll() {
+    public List<Order> getAlll() {
         return daoLibros.getAlll();
     }
 

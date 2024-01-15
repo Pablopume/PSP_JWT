@@ -1,16 +1,17 @@
 package jakarta.rest;
 
+import jakarta.RestConstantes;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import modelo.Libro;
+import modelo.Order;
 import servicios.ServiciosLibro;
 
 import java.util.List;
 
-@Path("/order")
+@Path(RestConstantes.ORDER)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class LibrosRest {
@@ -22,30 +23,30 @@ public class LibrosRest {
     }
 
     @GET
-    @RolesAllowed({"ADMIN", "USER"})
-    public List<Libro> getAllLibros() {
+    @RolesAllowed({RestConstantes.ADMIN, RestConstantes.USER})
+    public List<Order> getAllLibros() {
         return serviciosLibro.getAlll();
     }
 
     @DELETE
-    @Path("/{id}")
-    @RolesAllowed({"ADMIN"})
-    public Response deleteLibro(@PathParam("id") int id) {
+    @Path(RestConstantes.ID)
+    @RolesAllowed({RestConstantes.ADMIN})
+    public Response deleteLibro(@PathParam(RestConstantes.ID1) int id) {
         serviciosLibro.deleteLibro(id);
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @POST
-    @RolesAllowed({"ADMIN", "USER"})
-    public Libro addLibro(Libro libro) {
-        serviciosLibro.addLibro(libro);
-        return libro;
+    @RolesAllowed({RestConstantes.ADMIN, RestConstantes.USER})
+    public Order addLibro(Order order) {
+        serviciosLibro.addLibro(order);
+        return order;
     }
 
     @PUT
-    @RolesAllowed({"ADMIN", "USER"})
-    public Libro updateLibro(Libro libro) {
-        serviciosLibro.updateLibro(libro);
-        return libro;
+    @RolesAllowed({RestConstantes.ADMIN, RestConstantes.USER})
+    public Order updateLibro(Order order) {
+        serviciosLibro.updateLibro(order);
+        return order;
     }
 }

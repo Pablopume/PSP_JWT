@@ -1,16 +1,17 @@
 package jakarta.rest;
 
+import jakarta.RestConstantes;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import modelo.Autor;
+import modelo.Customer;
 import servicios.ServicesAutor;
 
+import java.util.List;
 
-@Path("/customer")
+
+@Path(RestConstantes.CUSTOMER)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AutorRest {
@@ -22,9 +23,13 @@ public class AutorRest {
     }
 
     @POST
-    public Autor addAutor(Autor autor) {
-        return servicesAutorImpl.add(autor);
+    public Customer addAutor(Customer customer) {
+        return servicesAutorImpl.add(customer);
     }
 
-
+    @RolesAllowed({RestConstantes.ADMIN, RestConstantes.USER})
+    @GET
+    public List<Customer> getAllAutores() {
+        return servicesAutorImpl.getAll();
+    }
 }

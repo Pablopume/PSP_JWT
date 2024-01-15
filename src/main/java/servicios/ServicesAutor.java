@@ -1,15 +1,15 @@
 package servicios;
 
-import modelo.Autor;
+import modelo.Customer;
 
 import java.util.List;
 
 public interface ServicesAutor {
-    Autor add(Autor autor);
+    Customer add(Customer customer);
 
-    Autor update(Autor autor);
+    Customer update(Customer customer);
 
-    Autor getByCodigoActivacion(String id);
-    List<Autor> getAll();
-    Autor getByEmail(String email);
+
+    List<Customer> getAll();
+
 }

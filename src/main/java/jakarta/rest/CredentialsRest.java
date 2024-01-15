@@ -1,5 +1,6 @@
 package jakarta.rest;
 
+import jakarta.RestConstantes;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -7,7 +8,7 @@ import jakarta.ws.rs.core.Response;
 import modelo.Credentials;
 import servicios.ServiciosCredentials;
 
-@Path("/credentials")
+@Path(RestConstantes.CREDENTIALS)
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CredentialsRest {
@@ -23,18 +24,18 @@ public class CredentialsRest {
     }
 
     @GET
-    @Path("/forgot-password")
-    public Response forgotPassword(@QueryParam("email")String email) {
+    @Path(RestConstantes.FORGOT_PASSWORD)
+    public Response forgotPassword(@QueryParam(RestConstantes.EMAIL)String email) {
         serviciosCredentials.forgotPassword(email);
-        return Response.ok("Se ha enviado un correo con la nueva contraseña").build();
+        return Response.ok(RestConstantes.SE_HA_ENVIADO_UN_CORREO_CON_LA_NUEVA_CONTRASENYA).build();
     }
     @GET
-    @Path("/login")
-    public Response getLogin(@QueryParam("user") String user, @QueryParam("password") String password) {
+    @Path(RestConstantes.LOGIN)
+    public Response getLogin(@QueryParam(RestConstantes.USERMINUSC) String user, @QueryParam(RestConstantes.PASSWORD) String password) {
         Response response;
         Credentials result = serviciosCredentials.doLogin(user, password);
         if (result!= null) {
-            response = Response.status(Response.Status.NO_CONTENT).header("Authorization", "Bearer "+ result.getAccessToken()).header("Refresh token",result.getRefreshToken()).build();
+            response = Response.status(Response.Status.NO_CONTENT).header(RestConstantes.AUTHORIZATION, RestConstantes.BEARER + result.getAccessToken()).header(RestConstantes.REFRESH_TOKEN2,result.getRefreshToken()).build();
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -42,12 +43,12 @@ public class CredentialsRest {
     }
 
     @GET
-    @Path("/refreshToken")
-    public Response refreshToken(@QueryParam("refreshToken") String refreshToken) {
+    @Path(RestConstantes.REFRESH_TOKEN)
+    public Response refreshToken(@QueryParam(RestConstantes.REFRESH_TOKEN1) String refreshToken) {
         Response response;
         String newToken = serviciosCredentials.refreshToken(refreshToken);
         if (newToken != null) {
-            response=Response.status(Response.Status.NO_CONTENT).header("Authorization", "Bearer "+ newToken).header("RefreshToken",refreshToken).build();
+            response=Response.status(Response.Status.NO_CONTENT).header(RestConstantes.AUTHORIZATION, RestConstantes.BEARER+ newToken).header(RestConstantes.REFRESH_TOKEN2,refreshToken).build();
 
         } else {
             response = Response.status(Response.Status.UNAUTHORIZED).build();
@@ -56,10 +57,10 @@ public class CredentialsRest {
     }
 
     @PUT
-    @Path("/cambiarContrasenya")
+    @Path(RestConstantes.CAMBIAR_CONTRASENYA)
     public Response cambiarContrasenya(Credentials credentials) {
         serviciosCredentials.cambiarContrasenya(credentials);
-        return Response.ok("Contraseña cambiada correctamente").build();
+        return Response.ok(RestConstantes.CONTRASENYA_CAMBIADA_CORRECTAMENTE).build();
     }
 
 }

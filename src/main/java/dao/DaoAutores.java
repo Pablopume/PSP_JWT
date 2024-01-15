@@ -1,15 +1,15 @@
 package dao;
 
-import modelo.Autor;
+import modelo.Customer;
 
 import java.util.List;
 
 public interface DaoAutores {
-    void add(Autor autor);
+    void add(Customer customer);
 
-    void update(Autor autor);
-    Autor getByCodigoActivacion(String id);
-    List<Autor> getAll();
-    Autor getByEmail(String email);
+    void update(Customer customer);
+
+    List<Customer> getAll();
+
 
 }

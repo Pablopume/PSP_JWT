@@ -1,6 +1,7 @@
 package security;
 
 import dao.TokenCredentials;
+import jakarta.RestConstantes;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.security.enterprise.AuthenticationStatus;
@@ -25,13 +26,13 @@ public class JWTAuth implements HttpAuthenticationMechanism {
     public AuthenticationStatus validateRequest(HttpServletRequest request, HttpServletResponse response, HttpMessageContext httpMessageContext) {
         String requestURL = request.getRequestURL().toString();
 
-        if (requestURL.contains("login") || requestURL.contains("forgot-password")
-                || requestURL.contains("refreshToken") || requestURL.contains("credentials")) {
+        if (requestURL.contains(SecurityConstantes.LOGIN) || requestURL.contains(SecurityConstantes.FORGOT_PASSWORD)
+                || requestURL.contains(SecurityConstantes.REFRESH_TOKEN) || requestURL.contains(SecurityConstantes.CREDENTIALS) || requestURL.contains(SecurityConstantes.CAMBIAR_CONTRASENYA) || requestURL.contains(RestConstantes.ACTIVAR) || requestURL.contains(RestConstantes.CAMBIAR)) {
             return httpMessageContext.doNothing();
         }
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer")) {
-            String token = authorizationHeader.substring("Bearer".length());
+        if (authorizationHeader != null && authorizationHeader.startsWith(SecurityConstantes.BEARER)) {
+            String token = authorizationHeader.substring(SecurityConstantes.BEARER.length());
 
             TokenCredentials tokenCredentials = new TokenCredentials(token, null);
             CredentialValidationResult validationResult = identity.validate(tokenCredentials);
