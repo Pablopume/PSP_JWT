@@ -6,7 +6,6 @@ import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 import modelo.exceptions.Exception401;
 
-import java.time.LocalDateTime;
 
 @Provider
 public class Exception401Mapper implements ExceptionMapper<Exception401> {

@@ -65,12 +65,11 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
     @Override
     public Credentials getByCodigoActivacion(String id) {
 
-        Credentials result=daoCredentials.getByCodigoActivacion(id);
-        if (result!=null) {
-            if (Duration.between(result.getFechaActivacion(), LocalDateTime.now()).getSeconds()>=300) {
+        Credentials result = daoCredentials.getByCodigoActivacion(id);
+        if (result != null) {
+            if (Duration.between(result.getFechaActivacion(), LocalDateTime.now()).getSeconds() >= 300) {
                 throw new Exception401(ServiceConstantes.TIEMPO_DE_ACTIVACION_EXPIRADO);
-            }
-            else {
+            } else {
                 result.setActivado(true);
                 daoCredentials.update(result);
                 return result;
@@ -84,7 +83,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
     // http://localhost:8080/PSP_JWT-1.0-SNAPSHOT/api/credentials/login?user=pabsermat@gmail.com&password=1234565675785858566548648645858548548458
     public Credentials doLogin(String email, String password) {
         Credentials credentials = daoCredentials.getByEmail(email);
-        if (credentials.getTemporalPassword()!=null) {
+        if (credentials.getTemporalPassword() != null) {
             if (verifyPassword(password, credentials.getTemporalPassword())) {
                 credentials.setAccessToken(generateToken(email));
                 credentials.setRefreshToken(generateRefreshToken(email));
@@ -92,8 +91,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
                 daoCredentials.updateRefreshToken(credentials);
                 return credentials;
             }
-        }
-        else {
+        } else {
             if (verifyPassword(password, credentials.getPassword())) {
                 credentials.setAccessToken(generateToken(email));
                 credentials.setRefreshToken(generateRefreshToken(email));
@@ -122,7 +120,9 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
     }
 
     @Override
-    public void cambiarCodigoActivacion(Credentials credentials) {
+    public void cambiarCodigoActivacion(String email) {
+        Credentials credentials = new Credentials();
+        credentials.setEmail(email);
         String codigo = Utils.randomBytes();
         credentials.setCodigoActivacion(codigo);
         daoCredentials.cambiarCodigoActivacion(credentials);
@@ -196,7 +196,7 @@ public class ServiciosCredentialsImpl implements ServiciosCredentials {
         Credentials credentials = daoCredentials.getByEmail(email);
         return Jwts.builder()
                 .setSubject(credentials.getEmail())
-                .claim(ServiceConstantes.ROL1, credentials.getRol())
+                .claim(ServiceConstantes.ROL, credentials.getRol())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 60000000))
                 .signWith(keyProvider.generatePrivateKey())

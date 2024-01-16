@@ -63,4 +63,11 @@ public class CredentialsRest {
         return Response.ok(RestConstantes.CONTRASENYA_CAMBIADA_CORRECTAMENTE).build();
     }
 
+    @GET
+    @Path("cambioCodigoActivacion")
+    public Response cambiarCodigoActivacion(@QueryParam(RestConstantes.CODIGO) String email) {
+
+        serviciosCredentials.cambiarCodigoActivacion(email);
+        return Response.ok(RestConstantes.CUENTA_ACTIVADA_CON_EXITO).build();
+    }
 }
